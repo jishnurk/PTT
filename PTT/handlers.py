@@ -240,14 +240,15 @@ def add_defaults(parser: Parser):
     parser.add_handler("codec", handle_space_in_codec)
 
     # Channels
-    parser.add_handler("channels", regex.compile(r"\bDDP?5[ \.\_]1\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": False})
-    parser.add_handler("channels", regex.compile(r"\b5\.1(ch)?\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": False})
-    parser.add_handler("channels", regex.compile(r"\b7[\.\- ]1(.?ch(annel)?)?\b", regex.IGNORECASE), uniq_concat(value("7.1")), {"remove": False})
-    parser.add_handler("channels", regex.compile(r"\b2\.0\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": False})
-    parser.add_handler("channels", regex.compile(r"\bstereo\b", regex.IGNORECASE), uniq_concat(value("stereo")), {"remove": False})
+    parser.add_handler("channels", regex.compile(r"\bD(olby)?D([+P]|PA)?.?5[._ ]1\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": False})
+    parser.add_handler("channels", regex.compile(r"\b5[._ ]1(ch(annel)?)?(?:x[2-4])?\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": True})
+    parser.add_handler("channels", regex.compile(r"\b6(ch(annel)?s?|[._ ]0)\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": False})
+    parser.add_handler("channels", regex.compile(r"\bD(olby)?D[+P]?.?2[._ ]0\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": False, "skipIfAlreadyFound": False})
+    parser.add_handler("channels", regex.compile(r"\b7[._ ]1(ch(annel)?)?\b", regex.IGNORECASE), uniq_concat(value("7.1")), {"remove": False, "skipIfAlreadyFound": False})
+    parser.add_handler("channels", regex.compile(r"\b(AAC)?2(ch(annel)?|[._ ]0)(?:x[2-4])?\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": False, "skipIfAlreadyFound": False})
+    parser.add_handler("channels", regex.compile(r"\bstereo\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": False})
     parser.add_handler("channels", regex.compile(r"\bmono\b", regex.IGNORECASE), uniq_concat(value("mono")), {"remove": False})
-    parser.add_handler("channels", regex.compile(r"\b(?:x[2-4]|5[\W]1(?:x[2-4])?)\b", regex.IGNORECASE), uniq_concat(value("5.1")), {"remove": True})
-    parser.add_handler("channels", regex.compile(r"\b2\.0(?:x[2-4])\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": True})
+    parser.add_handler("channels", regex.compile(r"\b2[._ ]0(?:x[2-4])\b", regex.IGNORECASE), uniq_concat(value("2.0")), {"remove": True, "skipIfAlreadyFound": False})
 
     # Audio
     parser.add_handler("audio", regex.compile(r"\bDTS.?X\b", regex.IGNORECASE), uniq_concat(value("DTS:X")), {"remove": True, "skipIfAlreadyFound": False})
